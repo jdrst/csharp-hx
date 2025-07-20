@@ -10,7 +10,6 @@
   dotnet-restore
   solution-open
   project-open
-  _roslyn_projectNeedsRestore
   dotnet-build
   dotnet-test
   dotnet)
@@ -23,22 +22,24 @@
 (define (open-init-scm)
   (helix.open (helix.static.get-init-scm-path)))
 
+
 ;; project needs restore handler
 (define (_roslyn_projectNeedsRestore)
-  (helix.register-lsp-notification-handler "csharp"
+  (helix.register-lsp-call-handler "csharp"
                                      "workspace/_roslyn_projectNeedsRestore"
-                                     (lambda (args) (dotnet-restore args))))
+                                     (lambda (call-id args) (dotnet-restore-inner args))))
+
 
 ;;@doc
 ;; dotnet restore via lsp
 ;; projects: the projects to restore, leave empty for all
 (define (dotnet-restore . projects)
-  (define args (if (hash? projects)
-                   projects
-                   (to-project-file-paths projects)))
+  (dotnet-restore-inner (to-project-file-paths projects)))
+
+(define (dotnet-restore-inner projects)
   (helix.send-lsp-command "csharp"
                           "workspace/_roslyn_restore"
-                          args
+                          projects
                           ; TODO: callback for partial results? this seems to be called when every message has arrived. maybe via spawn-native-thread or the other undocumented future thang?
                           (lambda (res) (for-each (lambda (hm) (helix.set-status! (hash-get hm 'message))) res))))
 
@@ -82,3 +83,7 @@
 ;; args: the args for the cli
 (define (dotnet . args)
       (helix.run-shell-command (string-join (cons "dotnet" args) " ")))
+
+
+; initialize
+(_roslyn_projectNeedsRestore)

@@ -9,15 +9,21 @@
 - [SofusA/csharp-language-server](https://github.com/SofusA/csharp-language-server)
 - helix PR [#8675](https://github.com/helix-editor/helix/pull/8675)
 - helix PR [#11315](https://github.com/helix-editor/helix/pull/11315)
+- steel PR [#45](https://github.com/mattwparas/helix/pull/45)
 
-(You can use my rebased branch [here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics))
+(You can use [my frankenfork here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics))
 
-Probably:
+## Installation
+
 `forge pkg install --git https://github.com/jdrst/csharp-hx.git`
 
 then in your `init.scm`
 
 `(require "csharp-hx/csharp-hx.scm")`
+
+## Features
+
+- Handle `workspace/_roslyn_projectNeedsRestore`
 
 ## Commands
 
