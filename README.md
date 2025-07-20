@@ -1,4 +1,4 @@
-# csharp.hx
+# csharp-hx
 
 **This is heavily WIP. Expect things to break and/or not work**
 
@@ -13,7 +13,7 @@
 (You can use my rebased branch [here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics))
 
 Probably:
-`forge pkg install --git https://github.com/jdrst/csharp.hx.git`
+`forge pkg install --git https://github.com/jdrst/csharp-hx.git`
 
 then in your `init.scm`
 
