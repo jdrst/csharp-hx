@@ -11,7 +11,9 @@
 - helix PR [#11315](https://github.com/helix-editor/helix/pull/11315)
 - steel PR [#45](https://github.com/mattwparas/helix/pull/45)
 
-(You can use [my frankenfork here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics))
+Merging these all together sadly seems to breaks some things. It's workable but highly unstable..  
+If you still want to try, you can use [my frankenfork here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics).
+
 
 ## Installation
 
@@ -19,11 +21,12 @@
 
 then in your `init.scm`
 
-`(require "csharp-hx/csharp-hx.scm")`
+`(require "csharp-hx/init.scm")`
 
 ## Features
 
 - Handle `workspace/_roslyn_projectNeedsRestore`
+- Handle `workspace/projectInitializationComplete` and request diagnostics for every open buffer
 
 ## Commands
 

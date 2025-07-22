@@ -3,10 +3,11 @@
 (require (prefix-in helix. "helix/configuration.scm"))
 (require (prefix-in helix. "helix/misc.scm"))
 (require (prefix-in helix.static. "helix/static.scm"))
+(require "roslyn/commands.scm")
 
 (provide
-  open-helix-scm
-  open-init-scm
+  open-helix-scm 
+  open-init-scm 
   dotnet-restore
   solution-open
   project-open
@@ -23,25 +24,12 @@
   (helix.open (helix.static.get-init-scm-path)))
 
 
-;; project needs restore handler
-(define (_roslyn_projectNeedsRestore)
-  (helix.register-lsp-call-handler "csharp"
-                                     "workspace/_roslyn_projectNeedsRestore"
-                                     (lambda (call-id args) (dotnet-restore-inner args))))
-
-
 ;;@doc
-;; dotnet restore via lsp
+;; dotnet restore via roslyn lsp
 ;; projects: the projects to restore, leave empty for all
 (define (dotnet-restore . projects)
-  (dotnet-restore-inner (to-project-file-paths projects)))
+  (roslyn-restore (to-project-file-paths projects)))
 
-(define (dotnet-restore-inner projects)
-  (helix.send-lsp-command "csharp"
-                          "workspace/_roslyn_restore"
-                          projects
-                          ; TODO: callback for partial results? this seems to be called when every message has arrived. maybe via spawn-native-thread or the other undocumented future thang?
-                          (lambda (res) (for-each (lambda (hm) (helix.set-status! (hash-get hm 'message))) res))))
 
 (define (to-project-file-paths projects)
       (hash "projectFilePaths" projects))
@@ -85,5 +73,3 @@
       (helix.run-shell-command (string-join (cons "dotnet" args) " ")))
 
 
-; initialize
-(_roslyn_projectNeedsRestore)
