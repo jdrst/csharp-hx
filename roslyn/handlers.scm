@@ -2,7 +2,8 @@
 ; (require (prefix-in helix. "helix/commands.scm"))
 (require (prefix-in helix. "helix/configuration.scm"))
 ; (require (prefix-in helix. "helix/misc.scm"))
-(require "commands.scm")
+(require (prefix-in textDocument. "commands/textdocument.scm"))
+(require (prefix-in workspace. "commands/workspace.scm"))
 
 (provide initialize)
 
@@ -23,18 +24,17 @@
                                      "workspace/_roslyn_projectNeedsRestore"
                                      ; TODO: make configurable if immediately or prompt
                                      ; something here is still very weird.
-                                     (lambda (call-id args) (roslyn-restore args))))
+                                     (lambda (call-id args) (workspace._roslyn_restore args))))
 
 
 ;; handler for 'workspace/projectInitializationComplete'
 (define (projectInitializationComplete)
   (helix.register-lsp-call-handler "csharp"
                                      "workspace/projectInitializationComplete"
-                                     ; TODO: refresh diagnostics for open (csharp) buffers
-                                     ; editor->doc-id?
-                                     (lambda (call-id args) (for-each pull-diagnostics (map (lambda (path) (string-append "file://" path)) (map editor-document->path (editor-all-documents)))))))
-                                     ; (lambda (call-id args) (for-each pull-diagnostics (editor-all-documents)))))
-                                     ; (lambda (call-id args) (log-unimplemented "workspace/projectInitializationComplete" (editor-all-documents)))))
+                                     ; (lambda (call-id args) (for-each textDocument.diagnostic (map (lambda (path) (string-append "file://" path)) (map editor-document->path (editor-all-documents)))))))
+                                     (lambda (call-id args) (let ((paths (map (lambda (path) (string-append "file://" path)) (map editor-document->path (editor-all-documents)))))
+                                                                      (for-each textDocument.diagnostic paths)
+                                                                      (for-each textDocument._vs_getProjectContexts paths)))))
 
 
 ;; handler for 'workspace/_roslyn_projectHasUnresolvedDependencies'

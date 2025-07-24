@@ -23,10 +23,10 @@ then in your `init.scm`
 
 `(require "csharp-hx/init.scm")`
 
-## Features
+## Current state
 
-- Handle `workspace/_roslyn_projectNeedsRestore`
-- Handle `workspace/projectInitializationComplete` and request diagnostics for every open buffer
+- Handle `workspace/_roslyn_projectNeedsRestore` by immediately restoring via roslyn (`workspace/_roslyn_restore`)
+- Handle `workspace/projectInitializationComplete` and call `textDocument/diagnostic` call `textDocument/_vs_getProjectContexts` for every open buffer
 
 ## Commands
 

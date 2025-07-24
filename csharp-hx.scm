@@ -3,7 +3,7 @@
 (require (prefix-in helix. "helix/configuration.scm"))
 (require (prefix-in helix. "helix/misc.scm"))
 (require (prefix-in helix.static. "helix/static.scm"))
-(require "roslyn/commands.scm")
+(require (prefix-in workspace. "roslyn/commands/workspace.scm"))
 
 (provide
   open-helix-scm 
@@ -28,7 +28,7 @@
 ;; dotnet restore via roslyn lsp
 ;; projects: the projects to restore, leave empty for all
 (define (dotnet-restore . projects)
-  (roslyn-restore (to-project-file-paths projects)))
+  (workspace._roslyn_restore (to-project-file-paths projects)))
 
 
 (define (to-project-file-paths projects)
