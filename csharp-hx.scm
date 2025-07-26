@@ -5,6 +5,7 @@
 (require (prefix-in helix.static. "helix/static.scm"))
 (require (prefix-in workspace. "roslyn/commands/workspace.scm"))
 (require (prefix-in utils. "utils.scm"))
+(require (prefix-in state. "roslyn/state.scm"))
 
 (provide
   open-helix-scm 
@@ -16,7 +17,6 @@
   dotnet-test
   dotnet)
 
-(define *current-solution* "")
 
 (define (open-helix-scm)
   (helix.open (helix.static.get-helix-scm-path)))
@@ -40,32 +40,39 @@
 ;; solution: the solution to load
 (define (solution-open solution)
   ; TODO: do we need to check if not string/single item?
-  ; (set! *current-solution* solution)
-  (helix.send-lsp-command "csharp" "solution/open" (hash "solution" (utils.to-rooted-file-uri solution)) (lambda (res) (log::info! (to-string res)))))
+  ; TODO: does a null (void) reponse mean "ok"? (probably)
+  ; TODO: when we call this without a solution already opened, we somehow need to know that the workspace switched?
+  (helix.send-lsp-command "csharp" "solution/open"
+                         (hash "solution" (utils.to-rooted-file-uri solution))
+                         (lambda (res) (if (void? res)
+                                           (state.set-current-solution solution)))))
 
 ;;@doc
 ;; load (a) project(s)
 ;; projects: the project(s) to load
 (define (project-open . projects)
-  (helix.send-lsp-command "csharp" "project/open" (hash "projects" (map utils.to-rooted-file-uri (projects))) (lambda (res) (log::info! (to-string res)))))
+  ; TODO handle stuff.. bad support atm
+  (helix.send-lsp-command "csharp" "project/open"
+                          (hash "projects" (map utils.to-rooted-file-uri (projects)))
+                          (lambda (res) (log::info! (to-string res)))))
 
 ;;@doc
 ;; run dotnet build
 ;; shortcut for ':dotnet build <currently-loaded-solution>'
 (define (dotnet-build)
-  ; TODO: do we want/need this?
-  ; (if (emtpy? *current-solution*)
-  ;     (helix.set-status! "no solution loaded")
-      (dotnet (list "build" *current-solution*)))
+        (let ((solution (state.try-get-current-solution)))
+        (if solution
+              (dotnet "build" solution)
+              (helix.set-status! "Can't build. No solution loaded."))))
 
 ;;@doc
 ;; run dotnet test
 ;; shortcut for ':dotnet test <currently-loaded-solution>'
 (define (dotnet-test)
-  ; TODO: do we want/need this?
-  ; (if (emtpy? *current-solution*)
-  ;     (helix.set-status! "no solution loaded")
-      (dotnet (list "test" *current-solution*)))
+        (let ((solution (state.try-get-current-solution)))
+        (if solution
+              (dotnet "test" solution)
+              (helix.set-status! "Can't test. No solution loaded."))))
 
 ;;@doc
 ;; run a dotnet cli command

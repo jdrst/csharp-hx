@@ -6,13 +6,15 @@
 
 ## Prerequisites
 
-- [SofusA/csharp-language-server](https://github.com/SofusA/csharp-language-server)
+- Install [SofusA/csharp-language-server](https://github.com/SofusA/csharp-language-server)
 - helix PR [#8675](https://github.com/helix-editor/helix/pull/8675)
 - helix PR [#11315](https://github.com/helix-editor/helix/pull/11315)
 - steel PR [#45](https://github.com/mattwparas/helix/pull/45)
+- steel PR [#53](https://github.com/mattwparas/helix/pull/53)
 
-Merging these all together sadly seems to breaks some things. It's workable but highly unstable..  
-If you still want to try, you can use [my frankenfork here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics).
+If you want to try, i'd advise using [my frankenfork here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics) (might be broken, no promises).
+
+To get everything ready, just run `cargo xtask steel`.
 
 
 ## Installation
@@ -26,7 +28,7 @@ then in your `init.scm`
 ## Current state
 
 - Handle `workspace/_roslyn_projectNeedsRestore` by immediately restoring via roslyn (`workspace/_roslyn_restore`)
-- Handle `workspace/projectInitializationComplete` and call `textDocument/diagnostic` call `textDocument/_vs_getProjectContexts` for every open buffer
+- Handle `workspace/projectInitializationComplete` and call `textDocument/diagnostic` and `textDocument/_vs_getProjectContexts` for every open (csharp) buffer
 
 ## Commands
 

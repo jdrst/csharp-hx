@@ -49,6 +49,7 @@
                                      ; TODO: let the user know? prompt if restore is desired?
                                      (lambda (call-id args) (log-unimplemented "workspace/_roslyn_projectHasUnresolvedDependencies" args))))
 
+
 ;; handler for 'workspace/refreshSourceGeneratedDocument'
 (define (refreshSourceGeneratedDocument)
   (helix.register-lsp-call-handler "csharp"

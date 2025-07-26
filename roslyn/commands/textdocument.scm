@@ -25,6 +25,7 @@
 
 ; hook to get notified when the current buffer loses focus. calls _vs_getProjectContexts on the active buffer if we're initialized       
 (register-hook! 'document-focus-lost
+                ; (lambda (_) (if (utils.is-csharp-document? (utils.current-document))
                 (lambda (_) (if (and (state.is-project-initialized?) (utils.is-csharp-document? (utils.current-document)))
                                 (_vs_getProjectContexts (editor-document->path (utils.current-document))))))
 

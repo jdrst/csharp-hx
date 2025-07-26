@@ -8,6 +8,7 @@
                           "workspace/_roslyn_restore"
                           projects
                           ; TODO: callback for partial results? this seems to be called when every message has arrived. maybe via spawn-native-thread or the other undocumented future thang?
+                          ; TODO: errorhandling?
                           (lambda (res) (for-each (lambda (hm) (helix.set-status! (hash-get hm 'message))) res))))
 
 
