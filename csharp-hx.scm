@@ -4,6 +4,7 @@
 (require (prefix-in helix. "helix/misc.scm"))
 (require (prefix-in helix.static. "helix/static.scm"))
 (require (prefix-in workspace. "roslyn/commands/workspace.scm"))
+(require (prefix-in utils. "utils.scm"))
 
 (provide
   open-helix-scm 
@@ -39,14 +40,14 @@
 ;; solution: the solution to load
 (define (solution-open solution)
   ; TODO: do we need to check if not string/single item?
-  (define *solution-open* solution)
-  (helix.send-lsp-command "csharp" "solution/open" (hash "solution" solution)))
+  ; (set! *current-solution* solution)
+  (helix.send-lsp-command "csharp" "solution/open" (hash "solution" (utils.to-rooted-file-uri solution)) (lambda (res) (log::info! (to-string res)))))
 
 ;;@doc
 ;; load (a) project(s)
 ;; projects: the project(s) to load
 (define (project-open . projects)
-  (helix.send-lsp-command "csharp" "project/open" (hash "projects" projects)))
+  (helix.send-lsp-command "csharp" "project/open" (hash "projects" (map utils.to-rooted-file-uri (projects))) (lambda (res) (log::info! (to-string res)))))
 
 ;;@doc
 ;; run dotnet build

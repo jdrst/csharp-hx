@@ -1,4 +1,5 @@
 (require (prefix-in helix. "helix/misc.scm"))
+(require (prefix-in helix. "helix/commands.scm"))
 
 (provide _roslyn_restore)
 
@@ -8,4 +9,5 @@
                           projects
                           ; TODO: callback for partial results? this seems to be called when every message has arrived. maybe via spawn-native-thread or the other undocumented future thang?
                           (lambda (res) (for-each (lambda (hm) (helix.set-status! (hash-get hm 'message))) res))))
+
 

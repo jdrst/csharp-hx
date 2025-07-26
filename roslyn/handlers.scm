@@ -1,9 +1,11 @@
 (require "helix/editor.scm")
 ; (require (prefix-in helix. "helix/commands.scm"))
 (require (prefix-in helix. "helix/configuration.scm"))
-; (require (prefix-in helix. "helix/misc.scm"))
+(require (prefix-in helix. "helix/misc.scm"))
 (require (prefix-in textDocument. "commands/textdocument.scm"))
 (require (prefix-in workspace. "commands/workspace.scm"))
+(require (prefix-in state. "state.scm"))
+(require (prefix-in utils. "../utils.scm"))
 
 (provide initialize)
 
@@ -14,6 +16,8 @@
   (refreshSourceGeneratedDocument))
 
 ; TODO: logging?
+
+
 
 (define (log-unimplemented call args)
   (log::info! (string-append "Got LSP call '" call "' which is not implemented yet. Args were: " (to-string args))))
@@ -31,10 +35,11 @@
 (define (projectInitializationComplete)
   (helix.register-lsp-call-handler "csharp"
                                      "workspace/projectInitializationComplete"
-                                     ; (lambda (call-id args) (for-each textDocument.diagnostic (map (lambda (path) (string-append "file://" path)) (map editor-document->path (editor-all-documents)))))))
-                                     (lambda (call-id args) (let ((paths (map (lambda (path) (string-append "file://" path)) (map editor-document->path (editor-all-documents)))))
+                                     (lambda (call-id args) (let ((paths (map utils.get-file-uri (filter utils.is-csharp-document? (editor-all-documents)))))
                                                                       (for-each textDocument.diagnostic paths)
-                                                                      (for-each textDocument._vs_getProjectContexts paths)))))
+                                                                      (for-each textDocument._vs_getProjectContexts paths)
+                                                                      (state.set-project-initialized #t)
+                                                                      (helix.set-status! "Project initialization complete.")))))
 
 
 ;; handler for 'workspace/_roslyn_projectHasUnresolvedDependencies'
