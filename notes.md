@@ -17,6 +17,31 @@
 
 - according to someone from the roslyn team that is all
 
+### lsp extension TODOs
+
+#### likely wanted/needed
+
+- [x] send `project/open`
+- [x] send `solution/open`
+- [x] send `workspace/_roslyn_restore`
+- [x] handle `workspace/_roslyn_projectNeedsRestore`
+  - [ ] maybe via prompt (configurable)?
+- [x] handle `workspace/projectInitializationComplete`
+- [x] send `textDocument/_vs_getProjectContexts`
+  - [ ] handle anonymous workspace stuff then
+- [ ] send `textDocument/runTests`
+- [ ] send `codeAction/resolveFixAll`
+- [ ] send `workspace/_roslyn_restorableProjects`
+- [ ] send `sourceGeneratedDocument/_roslyn_getText`
+- [ ] handle `workspace/refreshSourceGeneratedDocument`
+- [ ] handle `window/_roslyn_showToast`
+
+#### unsure 
+- [ ] send `workspace/buildOnlyDiagnosticIds`
+- [ ] send `workspace/_vs_registerSolutionSnapshot`
+- [ ] send `textDocument/_vs_onAutoInsert`
+- [ ] send `workspace/debugConfiguration`
+
 ## what is steel/helix missing:
 
 - a way to extend [lsp-capabilities](https://github.com/mattwparas/helix/issues/58)
