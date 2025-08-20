@@ -31,6 +31,7 @@
   - [ ] handle anonymous workspace stuff then
 - [ ] send `textDocument/runTests`
 - [ ] send `codeAction/resolveFixAll`
+- [ ] send `codeAction/resolveFixAll`
 - [ ] send `workspace/_roslyn_restorableProjects`
 - [ ] send `sourceGeneratedDocument/_roslyn_getText`
 - [ ] handle `workspace/refreshSourceGeneratedDocument`
@@ -41,9 +42,11 @@
 - [ ] send `workspace/_vs_registerSolutionSnapshot`
 - [ ] send `textDocument/_vs_onAutoInsert`
 - [ ] send `workspace/debugConfiguration`
+- [ ] [? `roslyn.client.completionComplexEdit`](https://github.com/dotnet/roslyn/blob/main/src/LanguageServer/Protocol/Handler/Completion/CompletionResultFactory.cs)
 
 ## what is steel/helix missing:
 
-- a way to extend [lsp-capabilities](https://github.com/mattwparas/helix/issues/58)
-- a way to handle unknown file uris (e.g. `roslyn-source-generated://...` for source generated documents)
-- a way to hook into [codeAction/resolve] (roslyn sends `roslyn.client.fixAllCodeAction` and expects [`codeAction/resolveFixAll`](https://github.com/dotnet/vscode-csharp/blob/eda86add4c0b031cd8f9af52190849632a7ca427/src/lsptoolshost/server/roslynProtocol.ts#L339) with the `scope` as response)
+- [x] a way to determine if an open buffer [is relevant for our lsp](https://github.com/mattwparas/helix/pull/53)
+- [ ] a way to extend [lsp-capabilities](https://github.com/mattwparas/helix/issues/58)
+- [ ] a way to handle unknown file uris (e.g. `roslyn-source-generated://...` for source generated documents)
+- [ ] a way to hook into `codeAction/resolve` (roslyn sends [`roslyn.client.fixAllCodeAction` or `roslyn.client.nestedCodeAction`](https://github.com/dotnet/roslyn/blob/main/src/LanguageServer/Protocol/Handler/CodeActions/CodeActionsHandler.cs) and expects [`codeAction/resolveFixAll`](https://github.com/dotnet/vscode-csharp/blob/eda86add4c0b031cd8f9af52190849632a7ca427/src/lsptoolshost/server/roslynProtocol.ts#L339) with the `scope` as response)
