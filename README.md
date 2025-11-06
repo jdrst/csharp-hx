@@ -8,14 +8,8 @@
 
 - Install [SofusA/csharp-language-server](https://github.com/SofusA/csharp-language-server)
 - helix PR [#8675](https://github.com/helix-editor/helix/pull/8675)
-- helix PR [#11315](https://github.com/helix-editor/helix/pull/11315)
-- steel PR [#45](https://github.com/mattwparas/helix/pull/45)
-- steel PR [#53](https://github.com/mattwparas/helix/pull/53)
 
-If you want to try, i'd advise using [my frankenfork here](https://github.com/jdrst/helix/tree/steel-and-pull-diagnostics) (might be broken, no promises).
-
-To get everything ready, just run `cargo xtask steel`.
-
+To get everything ready, build helix via `cargo xtask steel`.
 
 ## Installation
 
